@@ -1,0 +1,13 @@
+.color-btn {
+  color: var(--btn-text) !important;
+}
+
+.color-primary {
+  color: var(--primary-color) !important;
+
+  &.color-hover {
+    &:hover {
+      color: var(--primary-color-hover) !important;
+    }
+  }
+}
