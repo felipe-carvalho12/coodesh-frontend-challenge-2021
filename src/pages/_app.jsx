@@ -1,5 +1,6 @@
 import "../styles/globals.scss";
 import "../styles/utils/background.scss";
+import "../styles/utils/border.scss";
 import "../styles/utils/color.scss";
 import "../styles/material-ui/icon.scss";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -6,6 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import PatientInfoModal from "./PatientInfoModal";
 
 const columns = [
   { id: "name", label: "Name" },
@@ -15,6 +16,11 @@ const columns = [
 ];
 
 export default function PatientsTable({ renderedPatients }) {
+  const [patientInfoModal, setPatientInfoModal] = useState({
+    isOpen: false,
+    patient: null,
+  });
+
   const renderTimestamp = (timestamp) => {
     const ts = new Date(timestamp);
     const day = ts.getDate() >= 10 ? ts.getDate() : `0${ts.getDate()}`;
@@ -24,46 +30,68 @@ export default function PatientsTable({ renderedPatients }) {
   };
 
   return (
-    <Paper className="shadow-lg">
-      <TableContainer className="max-h-96">
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align="left"
-                  style={{ minWidth: column.minWidth }}
-                >
-                  <h5>{column.label}</h5>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {renderedPatients.map((patient) => {
-              const row = {
-                name: `${patient.name.first} ${patient.name.last}`,
-                gender: patient.gender,
-                birth: renderTimestamp(patient.dob.date),
-                actions: <button className="btn-primary">View</button>,
-              };
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align="left">
-                        {value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+    <>
+      <Paper className="shadow-lg">
+        <TableContainer className="max-h-96">
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align="left"
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    <h5>{column.label}</h5>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {renderedPatients.map((patient) => {
+                const row = {
+                  name: `${patient.name.first} ${patient.name.last}`,
+                  gender: patient.gender,
+                  birth: renderTimestamp(patient.dob.date),
+                  actions: (
+                    <button
+                      className="btn-primary"
+                      onClick={() =>
+                        setPatientInfoModal({ isOpen: true, patient: patient })
+                      }
+                    >
+                      View
+                    </button>
+                  ),
+                };
+                return (
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align="left">
+                          {value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+      <PatientInfoModal
+        isOpen={patientInfoModal.isOpen}
+        closeModal={() =>
+          setPatientInfoModal({
+            ...patientInfoModal,
+            isOpen: false,
+          })
+        }
+        patient={patientInfoModal.patient}
+        renderTimestamp={renderTimestamp}
+      />
+    </>
   );
 }

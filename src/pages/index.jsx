@@ -15,8 +15,6 @@ export default function Home() {
     ? router.query
     : { page: 1 };
 
-  console.log(page);
-
   useEffect(() => {
     fetch(`https://randomuser.me/api/?page=${page}&results=50&seed=abc`)
       .then((response) => response.json())
