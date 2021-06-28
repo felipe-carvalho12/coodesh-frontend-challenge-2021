@@ -1,6 +1,6 @@
 # Coodesh Front-End Challenge 🏅 2021
 
-Desafio de frontend da Coodesh, desenvolver um frontend que busca dados de clientes de uma empresa em uma api e os renderiza.
+Desafio de frontend da Coodesh: desenvolver um frontend que busca dados de clientes de uma empresa em uma api e os renderiza.
 
 ## Tecnologias usadas
 1. Next.js
