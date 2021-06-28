@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Head from "next/head";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Header from "../components/Header";
@@ -9,24 +8,18 @@ import PatientsTable from "../components/PatientsTable";
 export default function Home() {
   const [patients, setPatients] = useState(null);
   const [renderedPatients, setRenderedPatients] = useState(null);
-
-  const router = useRouter();
-  const { page } = Object.keys(router.query).includes("page")
-    ? router.query
-    : { page: 1 };
+  const [scrollCount, setScrollCount] = useState(1);
 
   useEffect(() => {
-    fetch(`https://randomuser.me/api/?page=${page}&results=50&seed=abc`)
+    fetch(
+      `https://randomuser.me/api/?results=${scrollCount * 50}&seed=ilovetech`
+    )
       .then((response) => response.json())
       .then((data) => {
         setPatients(data.results);
         setRenderedPatients(data.results);
       });
-  }, []);
-
-  if (!renderedPatients) {
-    return <CircularProgress />;
-  }
+  }, [scrollCount]);
 
   return (
     <>
@@ -41,21 +34,36 @@ export default function Home() {
           <div className="w-full lg:w-1/2 p-4 pt-20 sm:p-8 sm:pt-20 md:p-20 md:pt-20 lg:pt-32">
             <div className="w-full mb-4">
               <h4>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Quisquam, corporis totam aliquam accusamus aut saepe. Earum,
-                assumenda debitis. Molestiae voluptatum odio repellendus ratione
-                veritatis. Esse odio ipsam ab eius non!
+                Welcome to our patient management system! We are very happy to
+                have you working with us. You can filter patients by gender and
+                nationality and, if necessary, you can also search for specific
+                patients. If you need more information about a patient, just
+                click the &quot;View&quot; button on their line. If you have any
+                questions about the system, please do not hesitate to contact
+                your manager.
               </h4>
             </div>
-            <div className="w-full mb-4">
-              <FilterPatients
-                patients={patients}
-                setRenderedPatients={setRenderedPatients}
-              />
-            </div>
-            <div className="w-full">
-              <PatientsTable renderedPatients={renderedPatients} />
-            </div>
+            {renderedPatients ? (
+              <>
+                <div className="w-full mb-4">
+                  <FilterPatients
+                    patients={patients}
+                    setRenderedPatients={setRenderedPatients}
+                  />
+                </div>
+                <div className="w-full">
+                  <PatientsTable
+                    patients={patients}
+                    renderedPatients={renderedPatients}
+                    setScrollCount={setScrollCount}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="w-full flex justify-center">
+                <CircularProgress />
+              </div>
+            )}
           </div>
         </div>
       </div>

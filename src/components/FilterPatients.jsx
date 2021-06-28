@@ -7,6 +7,8 @@ export default function FilterPatients({ patients, setRenderedPatients }) {
   const [search, setSearch] = useState("");
   const [filterHeight, setFilterHeight] = useState(0);
 
+  const nationalitiesSet = new Set(patients.map((patient) => patient.nat));
+
   useEffect(() => {
     setRenderedPatients(
       patients.filter(
@@ -18,7 +20,32 @@ export default function FilterPatients({ patients, setRenderedPatients }) {
     );
   }, [search, patients, setRenderedPatients]);
 
-  const nationalitiesSet = new Set(patients.map((patient) => patient.nat));
+  const toggleAllFields = (checked, selector) => {
+    document.querySelectorAll(selector).forEach((el) => (el.checked = checked));
+  };
+
+  const getSelectedValues = (selector) => {
+    const arr = [];
+    document
+      .querySelectorAll(selector)
+      .forEach((el) => el.checked && arr.push(el.name));
+
+    return arr;
+  };
+
+  const handleConfirm = () => {
+    const selectedGenders = getSelectedValues(".gender");
+    const selectedNationalities = getSelectedValues(".nationality");
+
+    const filteredPatients = patients.filter(
+      (patient) =>
+        selectedNationalities.includes(patient.nat) &&
+        selectedGenders.includes(patient.gender)
+    );
+
+    setRenderedPatients(filteredPatients);
+    setFilterHeight(0);
+  };
 
   return (
     <>
@@ -47,10 +74,11 @@ export default function FilterPatients({ patients, setRenderedPatients }) {
             </div>
             <div className="w-full pl-2">
               <div>
-                <input type="checkbox" /> Male
+                <input type="checkbox" className="gender" name="male" /> Male
               </div>
               <div>
-                <input type="checkbox" /> Female
+                <input type="checkbox" className="gender" name="female" />{" "}
+                Female
               </div>
             </div>
           </div>
@@ -60,17 +88,30 @@ export default function FilterPatients({ patients, setRenderedPatients }) {
             </div>
             <div className="w-full pl-2">
               <div>
-                <input type="checkbox" /> All
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    toggleAllFields(e.target.checked, ".nationality")
+                  }
+                />{" "}
+                All
               </div>
               {Array.from(nationalitiesSet).map((nationality) => (
                 <div key={nationality}>
-                  <input type="checkbox" /> {nationality}
+                  <input
+                    type="checkbox"
+                    className="nationality"
+                    name={nationality}
+                  />{" "}
+                  {nationality}
                 </div>
               ))}
             </div>
           </div>
           <div className="w-full p-4">
-            <button className="btn-primary ml-auto">Confirm</button>
+            <button className="btn-primary ml-auto" onClick={handleConfirm}>
+              Confirm
+            </button>
           </div>
         </div>
       </AnimateHeight>

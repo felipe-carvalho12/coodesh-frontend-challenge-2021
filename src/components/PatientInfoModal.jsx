@@ -30,66 +30,68 @@ export default function PatientInfoModal({
       }}
     >
       <Fade in={isOpen}>
-        {patient !== null && (
-          <div className="w-96 bg-light rounded-md">
-            <div className="w-full flex flex-col justify-center items-center p-4 b-bottom-2px-bg-dark">
-              <Image
-                src={patient.picture.medium}
-                className="rounded-full b-2px-headline"
-                width={96}
-                height={96}
-                alt="patient-photo"
-              />
-              <h2>
-                {patient.name.first} {patient.name.last}
-              </h2>
+        <>
+          {patient !== null && (
+            <div className="w-96 bg-light rounded-md">
+              <div className="w-full flex flex-col justify-center items-center p-4 b-bottom-2px-bg-dark">
+                <Image
+                  src={patient.picture.medium}
+                  className="rounded-full b-2px-headline"
+                  width={96}
+                  height={96}
+                  alt="patient-photo"
+                />
+                <h2>
+                  {patient.name.first} {patient.name.last}
+                </h2>
+              </div>
+              <div className="w-full p-4">
+                <ul className="w-full">
+                  <li>
+                    <span>
+                      Email: <strong>{patient.email}</strong>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      Gender: <strong>{patient.gender}</strong>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      Birth date:{" "}
+                      <strong>{renderTimestamp(patient.dob.date)}</strong>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      Phone: <strong>{patient.phone}</strong>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      Nationality: <strong>{patient.nat}</strong>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      Address:{" "}
+                      <strong>
+                        {patient.location.street.number}{" "}
+                        {patient.location.street.name}, {patient.location.city}
+                      </strong>
+                    </span>
+                  </li>
+                  <li>
+                    <span>
+                      ID: <strong>{patientId}</strong>
+                    </span>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="w-full p-4">
-              <ul className="w-full">
-                <li>
-                  <span>
-                    Email: <strong>{patient.email}</strong>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Gender: <strong>{patient.gender}</strong>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Birth date:{" "}
-                    <strong>{renderTimestamp(patient.dob.date)}</strong>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Phone: <strong>{patient.phone}</strong>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Nationality: <strong>{patient.nat}</strong>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    Address:{" "}
-                    <strong>
-                      {patient.location.street.number}{" "}
-                      {patient.location.street.name}, {patient.location.city}
-                    </strong>
-                  </span>
-                </li>
-                <li>
-                  <span>
-                    ID: <strong>{patientId}</strong>
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        )}
+          )}
+        </>
       </Fade>
     </Modal>
   );
